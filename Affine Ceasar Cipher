@@ -1,0 +1,32 @@
+def affine_decrypt(text, k1, k2):
+    # Define the alphabet
+    abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    n = len(abc)
+
+    # Remove non-alphabetic characters and convert to uppercase
+    filtered_text = ''.join(char.upper() for char in text if char.isalpha())
+
+    decrypted_text = ''
+    for char in filtered_text:
+        # Apply the inverse affine transformation to decrypt each character
+        m = (pow(k1, -1, n) * (abc.index(char) - k2)) % n
+        decrypted_text += abc[m]
+
+    return decrypted_text
+
+def decrypt_affine_cipher(ciphertext):
+    # Iterate through possible values of l1 (odd number) and l2
+    for i in range(13):
+        l1 = 2 * i + 1  # l1 should always be an odd number
+        for l2 in range(26):  # Try all possible values for l2
+            # Decrypt the ciphertext using the current l1 and l2 values
+            decrypted_message = affine_decrypt(ciphertext, l1, l2)
+            # Print the decryption attempt details and result
+            print(f"Attempt for values: l1={l1}, l2={l2}: {decrypted_message}")
+
+# Ciphertext to be decrypted
+ciphertext = '''TKXOH ODGAD KFFAG AONAK EXKDI KAAYQ KARTS AWEYF FSEOL EKYFK 
+HBKLK YDTMY POLMO OHKLD YBFKD AOXYA YDYDD OO'''
+
+# Call the decryption function with the given ciphertext
+decrypt_affine_cipher(ciphertext)
